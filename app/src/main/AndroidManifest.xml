@@ -12,6 +12,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Rumo">
         <activity
+            android:name=".AreaUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".ManutencaoUsuario"
+            android:exported="false" />
+        <activity
+            android:name=".Vagas"
+            android:exported="false" />
+        <activity
+            android:name=".Rumo"
+            android:exported="false" />
+        <activity
+            android:name=".Cadastro"
+            android:exported="false" />
+        <activity
+            android:name=".LoginCadastro"
+            android:exported="false" />
+        <activity
+            android:name=".DadosVagaCurriculo"
+            android:exported="false" />
+        <activity
+            android:name=".EscolhaCurriculo"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
