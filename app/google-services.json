@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "545161804066",
+    "project_id": "rumo-fatec",
+    "storage_bucket": "rumo-fatec.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:545161804066:android:4cb25d74d19c731d1ecd7b",
+        "android_client_info": {
+          "package_name": "com.example.rumo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzVtnNUO8czHeov_QZKag65QhLE1JAUAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

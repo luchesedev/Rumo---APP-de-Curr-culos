@@ -7,4 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".AreaUsuario">
 
+    <Button
+        android:id="@+id/btnSair"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sair" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
