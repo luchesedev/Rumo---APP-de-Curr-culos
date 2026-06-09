@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F7"
+    android:background="@color/offwhite"
     tools:context=".Rumo">
 
     <!-- ===== APP BAR ===== -->
@@ -13,7 +13,7 @@
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@color/verde"
         app:elevation="0dp"
         app:liftOnScroll="false">
 
@@ -29,9 +29,9 @@
                 android:id="@+id/tvAppTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="rumo"
+                android:text="Rumo"
                 android:textSize="26sp"
-                android:textColor="#111111"
+                android:textColor="@color/bege"
                 android:textStyle="bold"
                 android:letterSpacing="0.05"
                 android:fontFamily="sans-serif-medium" />
@@ -75,26 +75,24 @@
                 android:layout_height="wrap_content"
                 android:text="Em destaque"
                 android:textSize="13sp"
-                android:textColor="#888888"
+                android:textColor="@color/cinzamedio"
                 android:textAllCaps="true"
                 android:letterSpacing="0.1"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="24dp"
                 android:layout_marginBottom="12dp" />
 
-            <!-- Carrossel horizontal (RecyclerView com scroll horizontal) -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCarousel"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:orientation="horizontal"
                 android:clipToPadding="false"
+                android:orientation="horizontal"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_carousel_card" />
 
-            <!-- Indicador de pontos do carrossel -->
             <LinearLayout
                 android:id="@+id/llCarouselIndicator"
                 android:layout_width="wrap_content"
@@ -104,8 +102,6 @@
                 android:orientation="horizontal"
                 android:gravity="center">
 
-                <!-- Os pontos são adicionados dinamicamente via código -->
-                <!-- Exemplo estático para preview: -->
                 <View
                     android:layout_width="8dp"
                     android:layout_height="8dp"
@@ -130,7 +126,7 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="28dp"
-                android:background="#EBEBEB" />
+                android:background="@color/brancobege" />
 
             <!-- ===== SEÇÃO: MEUS CURRÍCULOS ===== -->
             <LinearLayout
@@ -150,11 +146,10 @@
                     android:layout_weight="1"
                     android:text="Meus currículos"
                     android:textSize="20sp"
-                    android:textColor="#111111"
+                    android:textColor="@color/textoescuro"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif-medium" />
 
-                <!-- Botão "+" para adicionar novo currículo -->
                 <ImageView
                     android:id="@+id/ivAddCurriculo"
                     android:layout_width="36dp"
@@ -169,20 +164,17 @@
 
             </LinearLayout>
 
-            <!-- Lista de cards de currículos -->
-            <!-- Usando RecyclerView (recomendado) com scroll desabilitado pois está dentro do NestedScrollView -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvCurriculos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:listitem="@layout/item_curriculo_card"
-                tools:itemCount="3" />
+                tools:itemCount="3"
+                tools:listitem="@layout/item_curriculo_card" />
 
-            <!-- Estado vazio (visível quando não há currículos) -->
             <LinearLayout
                 android:id="@+id/llEmptyState"
                 android:layout_width="match_parent"
@@ -205,7 +197,7 @@
                     android:layout_marginTop="12dp"
                     android:text="Nenhum currículo ainda"
                     android:textSize="15sp"
-                    android:textColor="#AAAAAA"
+                    android:textColor="@color/cinzamedio"
                     android:gravity="center" />
 
             </LinearLayout>
@@ -214,7 +206,7 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- ===== FAB (opcional) ===== -->
+    <!-- ===== FAB ===== -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabNovoCurriculo"
         android:layout_width="wrap_content"
@@ -223,8 +215,8 @@
         android:layout_margin="20dp"
         android:contentDescription="Novo currículo"
         app:srcCompat="@drawable/ic_add"
-        app:backgroundTint="#111111"
-        app:tint="#FFFFFF"
+        app:backgroundTint="@color/verde"
+        app:tint="@color/bege"
         app:elevation="6dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
