@@ -16,14 +16,12 @@ public class CurriculoDAO {
     private ConnectionFactory conexao;
     private SQLiteDatabase banco;
 
-
     public CurriculoDAO(Context context) {
         try {
+            // O versionamento (1) deve ser incrementado se alterar a estrutura da tabela no futuro
             conexao = new ConnectionFactory(context, "dbCurriculo.db", null, 1);
-            // É aqui que o banco realmente tenta abrir ou criar as tabelas
             banco = conexao.getWritableDatabase();
         } catch (Exception e) {
-            // Se o banco falhar, o Logcat vai te avisar exatamente o porquê
             Log.e("ERRO_BANCO", "Erro ao abrir banco: " + e.getMessage());
         }
     }
@@ -38,6 +36,7 @@ public class CurriculoDAO {
         values.put("resumo", curriculo.getResumo());
         return banco.insert("tbcurriculo", null, values);
     }
+
     public void update(Curriculo curriculo) {
         ContentValues values = new ContentValues();
         values.put("dadosPessoais", curriculo.getDadosPessoais());
@@ -46,22 +45,29 @@ public class CurriculoDAO {
         values.put("habilidade", curriculo.getHabilidade());
         values.put("formacao", curriculo.getFormacao());
         values.put("resumo", curriculo.getResumo());
-        String[] args = {String.valueOf(curriculo.getCodigo())};
+
+        // Corrigido para usar getId()
+        String[] args = {String.valueOf(curriculo.getId())};
         banco.update("tbcurriculo", values, "id=?", args);
     }
 
     public void delete(Curriculo curriculo) {
-        String[] args = {String.valueOf(curriculo.getCodigo())};
+        // Corrigido para usar getId()
+        String[] args = {String.valueOf(curriculo.getId())};
         banco.delete("tbcurriculo", "id=?", args);
     }
+
     public List<Curriculo> obterTodos() {
         List<Curriculo> curriculos = new ArrayList<>();
+        // O cursor percorre os dados da tabela
         Cursor cursor = banco.query("tbcurriculo",
                 new String[]{"id", "dadosPessoais", "objetivo", "experiencia", "habilidade", "formacao", "resumo"},
                 null, null, null, null, null);
+
         while (cursor.moveToNext()) {
             Curriculo c = new Curriculo();
-            c.setCodigo(cursor.getInt(0));
+            // Corrigido para usar setId()
+            c.setId(cursor.getInt(0));
             c.setDadosPessoais(cursor.getString(1));
             c.setObjetivo(cursor.getString(2));
             c.setExperiencia(cursor.getString(3));

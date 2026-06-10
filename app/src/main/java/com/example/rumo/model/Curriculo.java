@@ -1,22 +1,11 @@
 package com.example.rumo.model;
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
 
 public class Curriculo implements Serializable {
-    //atributos
 
-
-    public int getCodigo() {
-        return codigo;
-    }
-
-    public void setCodigo(int codigo) {
-        this.codigo = codigo;
-    }
-    private int codigo;
-
+    // 1. Atributos (Sempre declarados no início da classe)
+    private int id;
     private String dadosPessoais;
     private String objetivo;
     private String experiencia;
@@ -24,10 +13,17 @@ public class Curriculo implements Serializable {
     private String formacao;
     private String resumo;
 
-    //Construtor
-
+    // 2. Construtor
     public Curriculo() {
+    }
 
+    // 3. Getters e Setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getDadosPessoais() {
@@ -77,6 +73,4 @@ public class Curriculo implements Serializable {
     public void setResumo(String resumo) {
         this.resumo = resumo;
     }
-
-
 }
