@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/offwhite"
+    android:fitsSystemWindows="true"
     tools:context=".Rumo">
 
     <!-- ===== APP BAR ===== -->
@@ -42,14 +43,15 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="end"
-                android:src="@drawable/ic_person"
                 android:background="@drawable/bg_circle_profile"
+                android:clickable="true"
+                android:contentDescription="Perfil do usuário"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless"
+                android:onClick="telaManutencao"
                 android:padding="8dp"
                 android:scaleType="centerCrop"
-                android:contentDescription="Perfil do usuário"
-                android:clickable="true"
-                android:focusable="true"
-                android:foreground="?attr/selectableItemBackgroundBorderless" />
+                android:src="@drawable/ic_person" />
 
         </androidx.appcompat.widget.Toolbar>
 
@@ -93,32 +95,6 @@
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/item_carousel_card" />
 
-            <LinearLayout
-                android:id="@+id/llCarouselIndicator"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal"
-                android:gravity="center">
-
-                <View
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
-                    android:layout_marginEnd="4dp"
-                    android:background="@drawable/bg_dot_active" />
-                <View
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
-                    android:layout_marginEnd="4dp"
-                    android:background="@drawable/bg_dot_inactive" />
-                <View
-                    android:layout_width="6dp"
-                    android:layout_height="6dp"
-                    android:background="@drawable/bg_dot_inactive" />
-
-            </LinearLayout>
-
             <!-- ===== DIVISOR ===== -->
             <View
                 android:layout_width="match_parent"
@@ -154,13 +130,14 @@
                     android:id="@+id/ivAddCurriculo"
                     android:layout_width="36dp"
                     android:layout_height="36dp"
-                    android:src="@drawable/ic_add"
                     android:background="@drawable/bg_circle_add"
-                    android:padding="8dp"
-                    android:contentDescription="Adicionar currículo"
                     android:clickable="true"
+                    android:contentDescription="Adicionar currículo"
                     android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless" />
+                    android:foreground="?attr/selectableItemBackgroundBorderless"
+                    android:onClick="telaCurriculo"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_add" />
 
             </LinearLayout>
 
@@ -214,9 +191,10 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="20dp"
         android:contentDescription="Novo currículo"
-        app:srcCompat="@drawable/ic_add"
+        android:onClick="telaCurriculo"
         app:backgroundTint="@color/verde"
-        app:tint="@color/bege"
-        app:elevation="6dp" />
+        app:elevation="6dp"
+        app:srcCompat="@drawable/ic_add"
+        app:tint="@color/bege" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
