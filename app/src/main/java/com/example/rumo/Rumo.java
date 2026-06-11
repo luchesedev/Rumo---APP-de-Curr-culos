@@ -58,31 +58,10 @@ public class Rumo extends AppCompatActivity {
 
     private void configurarListaCurriculos() {
         RecyclerView rvCurriculos = findViewById(R.id.rvCurriculos);
-
-        // Dados fictícios da lista de currículos
-        List<CurriculoAdapter.CurriculoItem> itens = new ArrayList<>();
-        itens.add(new CurriculoAdapter.CurriculoItem(
-                "Currículo Principal",
-                "07/06/2026",
-                "Completo",
-                true
-        ));
-        itens.add(new CurriculoAdapter.CurriculoItem(
-                "Currículo Tech",
-                "01/06/2026",
-                "Completo",
-                true
-        ));
-        itens.add(new CurriculoAdapter.CurriculoItem(
-                "Currículo Freelancer",
-                "20/05/2026",
-                "Incompleto",
-                false
-        ));
-
-        // Configura o RecyclerView vertical
+        CurriculoDAO dao = new CurriculoDAO(this);
+        List<Curriculo> lista = dao.obterTodos();
         rvCurriculos.setLayoutManager(new LinearLayoutManager(this));
-        rvCurriculos.setAdapter(new CurriculoAdapter(this, itens));
+        rvCurriculos.setAdapter(new CurriculoAdapter(this, lista));
     }
     public void telaCurriculo(View view){
         it = new Intent(getApplicationContext(), EscolhaCurriculo.class);

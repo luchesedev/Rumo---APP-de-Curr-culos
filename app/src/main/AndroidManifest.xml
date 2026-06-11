@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Rumo">
         <activity
+            android:name=".ManutencaoCurriculo"
+            android:exported="false" />
+        <activity
             android:name=".Tela_Base"
             android:exported="false" />
 

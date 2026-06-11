@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F7"
+    tools:context=".ManutencaoCurriculo">
+
+    <!-- ===== TOP BAR ===== -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        app:elevation="0dp"
+        app:liftOnScroll="false">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingStart="4dp"
+            android:paddingEnd="16dp">
+
+            <!-- Botão voltar -->
+            <ImageView
+                android:id="@+id/ivVoltar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_arrow_back"
+                android:padding="8dp"
+                android:contentDescription="Voltar"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackgroundBorderless" />
+
+            <!-- Título -->
+            <TextView
+                android:id="@+id/tvTituloTela"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Editar currículo"
+                android:textSize="18sp"
+                android:textColor="#111111"
+                android:textStyle="bold"
+                android:layout_marginStart="4dp"
+                android:fontFamily="sans-serif-medium" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- ===== CONTEÚDO ===== -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="100dp">
+
+            <!-- ===== SEÇÃO: DADOS PESSOAIS ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DADOS PESSOAIS"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Nome, idade, contato..."
+                        android:textSize="12sp"
+                        android:textColor="#999999"
+                        android:layout_marginBottom="6dp" />
+
+                    <EditText
+                        android:id="@+id/etDadosPessoais"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="80dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="#111111"
+                        android:hint="Ex: João Silva, 25 anos · joao@email.com · (11) 9 9999-9999"
+                        android:textColorHint="#BBBBBB"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ===== SEÇÃO: OBJETIVO ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OBJETIVO"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Cargo ou área pretendida"
+                        android:textSize="12sp"
+                        android:textColor="#999999"
+                        android:layout_marginBottom="6dp" />
+
+                    <EditText
+                        android:id="@+id/etObjetivo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="60dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="#111111"
+                        android:hint="Ex: Desenvolvedor Android Júnior"
+                        android:textColorHint="#BBBBBB"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ===== SEÇÃO: EXPERIÊNCIA ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EXPERIÊNCIA PROFISSIONAL"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Empresas, cargos e período"
+                        android:textSize="12sp"
+                        android:textColor="#999999"
+                        android:layout_marginBottom="6dp" />
+
+                    <EditText
+                        android:id="@+id/etExperiencia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="100dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="#111111"
+                        android:hint="Ex: Estagiário de TI · Empresa ABC · Jan/2024 – Atual"
+                        android:textColorHint="#BBBBBB"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ===== SEÇÃO: HABILIDADES ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="HABILIDADES"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ferramentas, idiomas, soft skills..."
+                        android:textSize="12sp"
+                        android:textColor="#999999"
+                        android:layout_marginBottom="6dp" />
+
+                    <EditText
+                        android:id="@+id/etHabilidade"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="80dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="#111111"
+                        android:hint="Ex: Java, Android Studio, Git, Inglês intermediário"
+                        android:textColorHint="#BBBBBB"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ===== SEÇÃO: FORMAÇÃO ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="FORMAÇÃO ACADÊMICA"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Curso, instituição e período"
+                        android:textSize="12sp"
+                        android:textColor="#999999"
+                        android:layout_marginBottom="6dp" />
+
+                    <EditText
+                        android:id="@+id/etFormacao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="80dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="#111111"
+                        android:hint="Ex: Análise e Desenvolvimento de Sistemas · FATEC · 2022–2025"
+                        android:textColorHint="#BBBBBB"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ===== SEÇÃO: RESUMO ===== -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="RESUMO PROFISSIONAL"
+                android:textSize="11sp"
+                android:textColor="#888888"
+                android:textAllCaps="true"
+                android:letterSpacing="0.1"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="28dp"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="#FFFFFF"
+                app:strokeWidth="0dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Breve apresentação profissional"
+                        android:textSize="12sp"
+                        android:textColor="#999999"
+                        android:layout_marginBottom="6dp" />
+
+                    <EditText
+                        android:id="@+id/etResumo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="100dp"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:background="@drawable/bg_edittext"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:textColor="#111111"
+                        android:hint="Ex: Desenvolvedor com foco em mobile, apaixonado por criar experiências intuitivas..."
+                        android:textColorHint="#BBBBBB"
+                        tools:ignore="HardcodedText" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- ===== BOTÕES ===== -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <!-- Botão excluir -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnExcluir"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp"
+                    android:text="Excluir"
+                    android:textSize="15sp"
+                    android:textColor="#CC0000"
+                    app:backgroundTint="#FFEBEE"
+                    app:cornerRadius="14dp"
+                    app:strokeWidth="0dp"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                <!-- Botão salvar -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSalvar"
+                    android:layout_width="0dp"
+                    android:layout_height="52dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Salvar"
+                    android:textSize="15sp"
+                    android:textColor="#FFFFFF"
+                    app:backgroundTint="#111111"
+                    app:cornerRadius="14dp"
+                    app:strokeWidth="0dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

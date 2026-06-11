@@ -1,39 +1,26 @@
 package com.example.rumo;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.rumo.model.Curriculo;
 
 import java.util.List;
 
 public class CurriculoAdapter extends RecyclerView.Adapter<CurriculoAdapter.ViewHolder> {
 
-    // Modelo de dados do card de currículo
-    public static class CurriculoItem {
-        public String nome;
-        public String dataAtualizacao;
-        public String status;        // ex: "Completo", "Incompleto"
-        public boolean completo;     // true = badge verde, false = badge amarelo
-
-        public CurriculoItem(String nome, String dataAtualizacao, String status, boolean completo) {
-            this.nome = nome;
-            this.dataAtualizacao = dataAtualizacao;
-            this.status = status;
-            this.completo = completo;
-        }
-    }
-
-    private final List<CurriculoItem> itens;
+    private final List<Curriculo> itens;
     private final Context context;
 
-    public CurriculoAdapter(Context context, List<CurriculoItem> itens) {
+    public CurriculoAdapter(Context context, List<Curriculo> itens) {
         this.context = context;
         this.itens = itens;
     }
@@ -48,30 +35,45 @@ public class CurriculoAdapter extends RecyclerView.Adapter<CurriculoAdapter.View
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CurriculoItem item = itens.get(position);
+        Curriculo item = itens.get(position);
 
-        holder.tvNome.setText(item.nome);
-        holder.tvSubtitulo.setText("Atualizado em " + item.dataAtualizacao);
-        holder.tvStatus.setText(item.status);
+        // Nome: usa o objetivo como título do card, ou "Currículo" se vazio
+        String titulo = (item.getObjetivo() != null && !item.getObjetivo().isEmpty())
+                ? item.getObjetivo()
+                : "Currículo " + (position + 1);
+        holder.tvNome.setText(titulo);
 
-        // Muda o badge de cor conforme o status
-        if (item.completo) {
+        // Subtítulo: dados pessoais resumidos ou texto padrão
+        String subtitulo = (item.getDadosPessoais() != null && !item.getDadosPessoais().isEmpty())
+                ? item.getDadosPessoais()
+                : "Sem dados pessoais";
+        holder.tvSubtitulo.setText(subtitulo);
+
+        // Badge: verde se tiver resumo preenchido, amarelo se não
+        boolean completo = item.getResumo() != null && !item.getResumo().isEmpty();
+        if (completo) {
+            holder.tvStatus.setText("Completo");
             holder.tvStatus.setTextColor(context.getColor(android.R.color.holo_green_dark));
             holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_green);
         } else {
-            holder.tvStatus.setTextColor(0xFFF57F17); // amarelo escuro
+            holder.tvStatus.setText("Incompleto");
+            holder.tvStatus.setTextColor(0xFFF57F17);
             holder.tvStatus.setBackgroundResource(R.drawable.bg_badge_yellow);
         }
 
-        // Clique no card inteiro
-        holder.itemView.setOnClickListener(v ->
-                Toast.makeText(context, "Abrir: " + item.nome, Toast.LENGTH_SHORT).show()
-        );
+        // Clique no card — abre tela de manutenção
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ManutencaoCurriculo.class);
+            intent.putExtra("curriculo_id", item.getId());
+            context.startActivity(intent);
+        });
 
-        // Clique nos três pontos
-        holder.ivMenu.setOnClickListener(v ->
-                Toast.makeText(context, "Menu: " + item.nome, Toast.LENGTH_SHORT).show()
-        );
+        // Clique nos três pontos — também abre manutenção
+        holder.ivMenu.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ManutencaoCurriculo.class);
+            intent.putExtra("curriculo_id", item.getId());
+            context.startActivity(intent);
+        });
     }
 
     @Override
@@ -87,10 +89,10 @@ public class CurriculoAdapter extends RecyclerView.Adapter<CurriculoAdapter.View
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvNome = itemView.findViewById(R.id.tvCurriculoNome);
+            tvNome     = itemView.findViewById(R.id.tvCurriculoNome);
             tvSubtitulo = itemView.findViewById(R.id.tvCurriculoSubtitulo);
-            tvStatus = itemView.findViewById(R.id.tvCurriculoStatus);
-            ivMenu = itemView.findViewById(R.id.ivCurriculoMenu);
+            tvStatus   = itemView.findViewById(R.id.tvCurriculoStatus);
+            ivMenu     = itemView.findViewById(R.id.ivCurriculoMenu);
         }
     }
 }

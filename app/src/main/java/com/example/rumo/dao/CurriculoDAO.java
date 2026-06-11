@@ -8,6 +8,9 @@ import android.util.Log;
 import com.example.rumo.model.Curriculo;
 import com.example.rumo.util.ConnectionFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CurriculoDAO {
     private ConnectionFactory conexao;
     private SQLiteDatabase banco;
@@ -73,7 +76,26 @@ public class CurriculoDAO {
         if (cursor != null) cursor.close();
         return null;
     }
-
+    public List<Curriculo> obterTodos() {
+        List<Curriculo> curriculos = new ArrayList<>();
+        Cursor cursor = banco.query("tbcurriculo",
+                new String[]{"id", "dadosPessoais", "objetivo", "experiencia", "habilidade", "formacao", "resumo", "email"},
+                null, null, null, null, null);
+        while (cursor.moveToNext()) {
+            Curriculo c = new Curriculo();
+            c.setId(cursor.getInt(0));
+            c.setDadosPessoais(cursor.getString(1));
+            c.setObjetivo(cursor.getString(2));
+            c.setExperiencia(cursor.getString(3));
+            c.setHabilidade(cursor.getString(4));
+            c.setFormacao(cursor.getString(5));
+            c.setResumo(cursor.getString(6));
+            c.setEmail(cursor.getString(7));
+            curriculos.add(c);
+        }
+        cursor.close();
+        return curriculos;
+    }
     public void delete(Curriculo curriculo) {
         String[] args = {String.valueOf(curriculo.getId())};
         banco.delete("tbcurriculo", "id=?", args);
