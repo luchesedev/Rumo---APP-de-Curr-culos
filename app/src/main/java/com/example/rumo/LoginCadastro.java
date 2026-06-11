@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 
-public class LoginCadastro extends AppCompatActivity {
+public class LoginCadastro extends Tela_Base  {
 
     private TextInputLayout layoutEmail, layoutSenha;
     private TextInputEditText editEmail, editSenha;
@@ -38,7 +38,6 @@ public class LoginCadastro extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_login_cadastro);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

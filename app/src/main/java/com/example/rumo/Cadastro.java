@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
-public class Cadastro extends AppCompatActivity {
+public class Cadastro  extends Tela_Base {
 
     private TextInputLayout layoutNome, layoutEmail, layoutSenha, layoutSenha2;
     private TextInputEditText editNome, editEmail, editSenha, editSenha2;
@@ -36,7 +36,6 @@ public class Cadastro extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_cadastro);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
