@@ -104,7 +104,12 @@ public class Cadastro extends AppCompatActivity {
                                     .addOnCompleteListener(profileTask -> {
                                         setCarregando(false);
                                         Toast.makeText(this, "Conta criada com sucesso!", Toast.LENGTH_SHORT).show();
-                                        telaLogin(null);
+
+                                        // AJUSTE AQUI:
+                                        // Em vez de voltar para o login, vamos direto para o preenchimento de dados
+                                        Intent intent = new Intent(Cadastro.this, AreaUsuario.class);
+                                        startActivity(intent);
+                                        finish(); // Finaliza a tela de cadastro para não voltar nela
                                     });
                         }
                     } else {

@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 public class Curriculo implements Serializable {
 
-    // 1. Atributos (Sempre declarados no início da classe)
+    // 1. Atributos
     private int id;
+    private String email; // Adicionado para identificar o dono do registro
     private String dadosPessoais;
     private String objetivo;
     private String experiencia;
@@ -24,6 +25,15 @@ public class Curriculo implements Serializable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    // Adicionado Getter e Setter para o e-mail
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getDadosPessoais() {

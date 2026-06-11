@@ -56,7 +56,7 @@ public class EscolhaCurriculo extends AppCompatActivity {
         voltar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                it = new Intent(EscolhaCurriculo.this, MainActivity.class);
+                it = new Intent(EscolhaCurriculo.this, Rumo.class);
                 startActivity(it);
                 finish();
             }
