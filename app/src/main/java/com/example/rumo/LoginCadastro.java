@@ -1,4 +1,4 @@
-package com.example.rumo; // Mantenha o package name do seu projeto
+package com.example.rumo;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,7 +16,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.example.rumo.R;
+import com.example.rumo.dao.CurriculoDAO;
+import com.example.rumo.model.Curriculo;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseNetworkException;
@@ -123,7 +124,6 @@ public class LoginCadastro extends AppCompatActivity {
                     }
                 });
     }
-
     private void recuperarSenha() {
         String email = editEmail.getText().toString().trim();
 
@@ -132,8 +132,7 @@ public class LoginCadastro extends AppCompatActivity {
             return;
         }
 
-        FirebaseAuth.getInstance()
-                .sendPasswordResetEmail(email)
+        mAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Toast.makeText(this, "E-mail de recuperação enviado!", Toast.LENGTH_LONG).show();
@@ -165,11 +164,22 @@ public class LoginCadastro extends AppCompatActivity {
         txtEsqueciSenha = findViewById(R.id.txtEsqueciSenha);
     }
 
+    // Método que chama a tela principal após o login
     private void irParaMain() {
-        // Substitua TelaEventos pela sua activity principal
-        Intent it = new Intent(getApplicationContext(), Rumo.class);
-        it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(it);
+        String email = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+        CurriculoDAO dao = new CurriculoDAO(this);
+        Curriculo curriculo = dao.buscarPorEmail(email);
+
+        Intent intent;
+        // Se o currículo for nulo, é o primeiro acesso -> AreaUsuario
+        if (curriculo == null) {
+            intent = new Intent(this, AreaUsuario.class);
+        } else {
+            // Se já existe, vai direto para a tela principal
+            intent = new Intent(this, Rumo.class);
+        }
+        startActivity(intent);
+        finish();
     }
 
     public void telaCadastro(View view) {

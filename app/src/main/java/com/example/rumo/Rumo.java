@@ -90,7 +90,16 @@ public class Rumo extends AppCompatActivity {
         startActivity(it);
     }
     public void telaManutencao(View view){
-        it = new Intent(getApplicationContext(), ManutencaoUsuario.class);
+        // 1. "Pesca" o e-mail que a tela de Login enviou para esta tela
+        String emailLogado = getIntent().getStringExtra("email_usuario");
+
+        // 2. Prepara a viagem para a tela de Manutenção
+        Intent it = new Intent(this, ManutencaoUsuario.class);
+
+        // 3. Coloca o e-mail na bagagem para a próxima tela
+        it.putExtra("email_usuario", emailLogado);
+
+        // 4. Inicia a nova tela
         startActivity(it);
     }
 }

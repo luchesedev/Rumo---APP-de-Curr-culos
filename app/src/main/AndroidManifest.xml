@@ -44,8 +44,6 @@
             android:exported="false" />
         <activity
             android:name=".ManutencaoUsuario"
-
-
             android:exported="false" />
         <activity
             android:name=".LoginCadastro"

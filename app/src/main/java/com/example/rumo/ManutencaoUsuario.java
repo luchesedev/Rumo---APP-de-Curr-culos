@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -14,37 +15,56 @@ import com.example.rumo.model.Curriculo;
 import com.google.android.material.textfield.TextInputEditText;
 import java.util.List;
 
-public class ManutencaoUsuario extends AppCompatActivity {
 
-    private TextInputEditText editNome, editBairro, editTelefone, editEmail, editLink, editInstituicao, editPeriodo, editStatus, editHabilidade, editExperiencia, editResumo;
-    private MultiAutoCompleteTextView editAreaCursos;
-    private Button btnSalvar, btnSair;
 
-    private CurriculoDAO dao;
-    private Curriculo curriculoAtual;
-    private final String SEPARADOR = "##";
+    public class ManutencaoUsuario extends AppCompatActivity {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manutencao_usuario);
+        private TextInputEditText editNome, editBairro, editTelefone, editEmail, editLink, editInstituicao, editPeriodo, editStatus, editHabilidade, editExperiencia, editResumo;
+        private MultiAutoCompleteTextView editAreaCursos;
+        private Button btnSalvar, btnSair;
+        private ImageView btnVoltar;
 
-        dao = new CurriculoDAO(this);
-        inicializarComponentes();
-        configurarAbas();
-        configurarCursosMultiplos();
+        private CurriculoDAO dao;
+        private Curriculo curriculoAtual;
+        private String emailUsuarioLogado; // Identificador do usuário
+        private final String SEPARADOR = "##";
 
-        curriculoAtual = (Curriculo) getIntent().getSerializableExtra("curriculo_selecionado");
-        if (curriculoAtual == null) {
-            List<Curriculo> lista = dao.obterTodos();
-            if (lista != null && !lista.isEmpty()) curriculoAtual = lista.get(0);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_manutencao_usuario);
+
+            // ------------------------------------------------------------------
+            // 1. PEGA O E-MAIL DIRETO DO FIREBASE (Muito mais seguro e não falha)
+            // ------------------------------------------------------------------
+            if (com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser() != null) {
+                emailUsuarioLogado = com.google.firebase.auth.FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                Toast.makeText(this, "Logado como: " + emailUsuarioLogado, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Erro: Nenhum usuário logado no Firebase!", Toast.LENGTH_LONG).show();
+                finish(); // Fecha a tela se não tiver ninguém logado
+                return;
+            }
+
+            dao = new CurriculoDAO(this);
+            inicializarComponentes();
+            configurarAbas();
+            configurarCursosMultiplos();
+
+            // 2. Busca o currículo específico deste e-mail
+            curriculoAtual = dao.buscarPorEmail(emailUsuarioLogado);
+
+            // 3. Preenche a tela
+            if (curriculoAtual != null) {
+                preencherDadosNaTela();
+            } else {
+                editEmail.setText(emailUsuarioLogado); // Pré-preenche o e-mail se for novo
+            }
+
+            btnSalvar.setOnClickListener(v -> salvarCurriculo());
+            btnSair.setOnClickListener(v -> deslogarUsuario());
+            btnVoltar.setOnClickListener(v -> finish());
         }
-
-        if (curriculoAtual != null) preencherDadosNaTela();
-
-        btnSalvar.setOnClickListener(v -> salvarCurriculo());
-        btnSair.setOnClickListener(v -> deslogarUsuario());
-    }
 
     private void inicializarComponentes() {
         editNome = findViewById(R.id.editNome);
@@ -60,14 +80,10 @@ public class ManutencaoUsuario extends AppCompatActivity {
         editResumo = findViewById(R.id.editResumo);
         btnSalvar = findViewById(R.id.btnSalvar);
         btnSair = findViewById(R.id.btnSair);
+        btnVoltar = findViewById(R.id.btnVoltar);
     }
 
-    private void deslogarUsuario() {
-        Intent intent = new Intent(this, LoginCadastro.class); // Mude p/ sua activity de login
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
+
 
     private void preencherDadosNaTela() {
         if (curriculoAtual.getDadosPessoais() != null) {
@@ -89,29 +105,49 @@ public class ManutencaoUsuario extends AppCompatActivity {
         editResumo.setText(curriculoAtual.getResumo());
     }
 
-    private void salvarCurriculo() {
-        if (editNome.getText().toString().isEmpty() || editEmail.getText().toString().isEmpty()) {
-            Toast.makeText(this, "Nome e E-mail obrigatórios", Toast.LENGTH_SHORT).show();
-            return;
+        private void salvarCurriculo() {
+            String emailDigitado = editEmail.getText().toString().trim();
+            if (editNome.getText().toString().isEmpty() || emailDigitado.isEmpty()) {
+                Toast.makeText(this, "Nome e E-mail obrigatórios", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            boolean isNovo = (curriculoAtual == null);
+            if (isNovo) curriculoAtual = new Curriculo();
+
+            // Salva os dados
+            String dados = editNome.getText() + SEPARADOR + editBairro.getText() + SEPARADOR + editTelefone.getText() + SEPARADOR + emailDigitado;
+            String formacao = editInstituicao.getText() + SEPARADOR + editPeriodo.getText() + SEPARADOR + editStatus.getText();
+
+            curriculoAtual.setDadosPessoais(dados);
+            curriculoAtual.setFormacao(formacao);
+            curriculoAtual.setObjetivo(editAreaCursos.getText().toString());
+            curriculoAtual.setHabilidade(editHabilidade.getText().toString());
+            curriculoAtual.setExperiencia(editExperiencia.getText().toString());
+            curriculoAtual.setResumo(editResumo.getText().toString());
+
+            // Garante que o e-mail esteja no modelo (se sua classe Curriculo tiver esse campo)
+            curriculoAtual.setEmail(emailDigitado);
+
+            if (isNovo) dao.Insert(curriculoAtual); else dao.update(curriculoAtual);
+            Toast.makeText(this, "Salvo com sucesso!", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
-        String dados = editNome.getText() + SEPARADOR + editBairro.getText() + SEPARADOR + editTelefone.getText() + SEPARADOR + editEmail.getText();
-        String formacao = editInstituicao.getText() + SEPARADOR + editPeriodo.getText() + SEPARADOR + editStatus.getText();
+        private void deslogarUsuario() {
+            // 1. Encerra a sessão do usuário no Firebase (ESSENCIAL)
+            com.google.firebase.auth.FirebaseAuth.getInstance().signOut();
 
-        boolean isNovo = (curriculoAtual == null);
-        if (isNovo) curriculoAtual = new Curriculo();
+            // 2. Cria a intenção para voltar ao Login
+            Intent intent = new Intent(this, LoginCadastro.class);
 
-        curriculoAtual.setDadosPessoais(dados);
-        curriculoAtual.setFormacao(formacao);
-        curriculoAtual.setObjetivo(editAreaCursos.getText().toString());
-        curriculoAtual.setHabilidade(editHabilidade.getText().toString());
-        curriculoAtual.setExperiencia(editExperiencia.getText().toString());
-        curriculoAtual.setResumo(editResumo.getText().toString());
+            // 3. Limpa todas as telas que ficaram para trás na memória
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-        if (isNovo) dao.Insert(curriculoAtual); else dao.update(curriculoAtual);
-        Toast.makeText(this, "Salvo com sucesso!", Toast.LENGTH_SHORT).show();
-        finish();
-    }
+            // 4. Inicia a tela de login e finaliza a atual
+            startActivity(intent);
+            finish();
+        }
 
     private void configurarCursosMultiplos() {
         String[] c = {"Administração", "TI", "Logística", "Engenharia"};
