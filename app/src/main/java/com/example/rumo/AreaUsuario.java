@@ -11,15 +11,23 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.rumo.dao.CurriculoDAO;
+import com.example.rumo.model.Curriculo;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
-public class AreaUsuario  extends Tela_Base  {
+public class AreaUsuario extends AppCompatActivity {
 
     private Button btnSalvar;
+
+    // 1. Alterado para TextInputEditText para ficar igual ao seu XML
+    private TextInputEditText editArea;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_area_usuario);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
@@ -28,19 +36,40 @@ public class AreaUsuario  extends Tela_Base  {
             return insets;
         });
 
-        btnSalvar = findViewById(R.id.btnSalvarRumo); // Certifique-se de que o ID no XML é este mesmo
+        btnSalvar = findViewById(R.id.btnSalvarRumo);
+
+        // 2. Vinculando o ID correto encontrado no XML
+        editArea = findViewById(R.id.txtArea);
 
         btnSalvar.setOnClickListener(v -> {
-            // 1. AQUI VOCÊ DEVE CHAMAR A LÓGICA QUE SALVA OS DADOS NO BANCO (DAO)
-            // ex: dao.Insert(curriculo);
 
-            // 2. REMOVEMOS O signOut()! Não queremos deslogar o usuário ao salvar.
+            // 3. Pega o usuário logado no Firebase para extrair o e-mail
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            if (user == null) {
+                Toast.makeText(this, "Erro: Sessão inválida!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            String emailLogado = user.getEmail();
+
+            // 4. Captura o que o usuário digitou no campo de cursos
+            String cursosEscolhidos = "";
+            if (editArea != null && editArea.getText() != null) {
+                cursosEscolhidos = editArea.getText().toString().trim();
+            }
+
+            // 5. Prepara o objeto Curriculo
+            Curriculo novoCurriculo = new Curriculo();
+            novoCurriculo.setEmail(emailLogado);
+            novoCurriculo.setObjetivo(cursosEscolhidos); // Salva o curso na variável "Objetivo"
+
+            // 6. Salva no banco (o autoincrement cuida do ID)
+            CurriculoDAO dao = new CurriculoDAO(this);
+            dao.Insert(novoCurriculo);
 
             Toast.makeText(this, "Dados salvos com sucesso!", Toast.LENGTH_SHORT).show();
 
-            // 3. Agora sim, enviamos para a tela Rumo
+            // 7. Envia para a tela principal (Rumo)
             Intent it = new Intent(this, Rumo.class);
-            // Usamos clear task para garantir que o usuário não volte para a tela de preenchimento
             it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(it);
             finish();
