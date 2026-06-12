@@ -18,12 +18,50 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
-public class ManutencaoUsuario extends AppCompatActivity {
+public class ManutencaoUsuario extends Tela_Base {
 
     private TextInputEditText editNome, editBairro, editTelefone, editEmail, editInstituicao, editPeriodo, editStatus, editHabilidade, editExperiencia, editResumo;
     private MultiAutoCompleteTextView editAreaCursos;
     private Button btnSalvar, btnSair;
     private ImageView btnVoltar;
+
+    private final String[] AREAS = {
+            "Administração", "Agronegócio", "Agronomia", "Análise de Dados",
+            "Análise de Sistemas", "Arquitetura", "Arquitetura de Software",
+            "Artes Visuais", "Assistência Social", "Astronomia",
+            "Atendimento ao Cliente", "Auditoria", "Automação Industrial",
+            "Biologia", "Biomedicina", "Biotecnologia", "Ciência da Computação",
+            "Ciências Contábeis", "Ciências Econômicas", "Cinema e Audiovisual",
+            "Coaching", "Comércio Exterior", "Comunicação", "Construção Civil",
+            "Consultoria", "Contabilidade", "Customer Success",
+            "Data Science", "Design", "Design de Interiores", "Design Gráfico",
+            "Design de Produto", "Design UX/UI", "Desenvolvimento Mobile",
+            "Desenvolvimento Web", "DevOps", "Direito", "E-commerce",
+            "Educação", "Educação Física", "Eletricidade", "Eletrônica",
+            "Enfermagem", "Engenharia Aeronáutica", "Engenharia Agronômica",
+            "Engenharia Ambiental", "Engenharia Civil", "Engenharia de Alimentos",
+            "Engenharia de Computação", "Engenharia de Produção",
+            "Engenharia de Software", "Engenharia Elétrica", "Engenharia Mecânica",
+            "Engenharia Química", "Estética", "Eventos", "Farmácia",
+            "Finanças", "Física", "Fisioterapia", "Fotografia",
+            "Gastronomia", "Geologia", "Gestão Ambiental", "Gestão de Pessoas",
+            "Gestão de Projetos", "Gestão de Qualidade", "Gestão de Riscos",
+            "Gestão Financeira", "Gestão Hospitalar", "Gestão Pública",
+            "Hotelaria", "Infraestrutura de TI", "Inteligência Artificial",
+            "Jornalismo", "Jurídico", "Letras", "Logística", "Machine Learning",
+            "Marketing", "Marketing Digital", "Matemática", "Medicina",
+            "Medicina Veterinária", "Meteorologia", "Moda", "Música",
+            "Nutrição", "Oceanografia", "Odontologia", "Pedagogia",
+            "Petróleo e Gás", "Piscicultura", "Produção Cultural",
+            "Produção Industrial", "Psicologia", "Publicidade e Propaganda",
+            "Química", "Radiologia", "Recursos Humanos", "Redes de Computadores",
+            "Relações Internacionais", "Relações Públicas", "Saúde",
+            "Segurança da Informação", "Segurança do Trabalho",
+            "Serviço Social", "Sistemas de Informação", "Sociologia",
+            "Suporte Técnico", "Sustentabilidade", "Tecnologia da Informação",
+            "Telecomunicações", "Terapia Ocupacional", "Turismo",
+            "Urbanismo", "Vendas", "Zootecnia"
+    };
 
     private CurriculoDAO dao;
     private Curriculo curriculoAtual;
@@ -157,9 +195,33 @@ public class ManutencaoUsuario extends AppCompatActivity {
     }
 
     private void configurarCursosMultiplos() {
-        String[] c = {"Administração", "TI", "Logística", "Engenharia"};
-        editAreaCursos.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, c));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                AREAS
+        );
+        editAreaCursos.setAdapter(adapter);
         editAreaCursos.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        editAreaCursos.setThreshold(1);
+
+        editAreaCursos.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String[] partes = s.toString().split(",");
+                long preenchidas = 0;
+                for (String p : partes) {
+                    if (!p.trim().isEmpty()) preenchidas++;
+                }
+                if (preenchidas > 3) {
+                    editAreaCursos.setError("Máximo de 3 áreas atingido");
+                } else {
+                    editAreaCursos.setError(null);
+                }
+            }
+        });
     }
 
     private void configurarAbas() {

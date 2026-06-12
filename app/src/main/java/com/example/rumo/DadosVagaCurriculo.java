@@ -49,7 +49,7 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class DadosVagaCurriculo extends AppCompatActivity {
+public class DadosVagaCurriculo extends Tela_Base {
 
     private TextInputEditText inputCargo, inputDescricao, inputPalavrasChave;
     private Button btnContinuar;
@@ -66,7 +66,6 @@ public class DadosVagaCurriculo extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_dados_vaga_curriculo);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {

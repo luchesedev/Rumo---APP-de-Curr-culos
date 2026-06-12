@@ -32,6 +32,44 @@ public class AreaUsuario extends Tela_Base {
     private String emailUsuarioLogado;
     private final String SEPARADOR = "##";
 
+    private final String[] AREAS = {
+            "Administração", "Agronegócio", "Agronomia", "Análise de Dados",
+            "Análise de Sistemas", "Arquitetura", "Arquitetura de Software",
+            "Artes Visuais", "Assistência Social", "Astronomia",
+            "Atendimento ao Cliente", "Auditoria", "Automação Industrial",
+            "Biologia", "Biomedicina", "Biotecnologia", "Ciência da Computação",
+            "Ciências Contábeis", "Ciências Econômicas", "Cinema e Audiovisual",
+            "Coaching", "Comércio Exterior", "Comunicação", "Construção Civil",
+            "Consultoria", "Contabilidade", "Customer Success",
+            "Data Science", "Design", "Design de Interiores", "Design Gráfico",
+            "Design de Produto", "Design UX/UI", "Desenvolvimento Mobile",
+            "Desenvolvimento Web", "DevOps", "Direito", "E-commerce",
+            "Educação", "Educação Física", "Eletricidade", "Eletrônica",
+            "Enfermagem", "Engenharia Aeronáutica", "Engenharia Agronômica",
+            "Engenharia Ambiental", "Engenharia Civil", "Engenharia de Alimentos",
+            "Engenharia de Computação", "Engenharia de Produção",
+            "Engenharia de Software", "Engenharia Elétrica", "Engenharia Mecânica",
+            "Engenharia Química", "Estética", "Eventos", "Farmácia",
+            "Finanças", "Física", "Fisioterapia", "Fotografia",
+            "Gastronomia", "Geologia", "Gestão Ambiental", "Gestão de Pessoas",
+            "Gestão de Projetos", "Gestão de Qualidade", "Gestão de Riscos",
+            "Gestão Financeira", "Gestão Hospitalar", "Gestão Pública",
+            "Hotelaria", "Infraestrutura de TI", "Inteligência Artificial",
+            "Jornalismo", "Jurídico", "Letras", "Logística", "Machine Learning",
+            "Marketing", "Marketing Digital", "Matemática", "Medicina",
+            "Medicina Veterinária", "Meteorologia", "Moda", "Música",
+            "Nutrição", "Oceanografia", "Odontologia", "Pedagogia",
+            "Petróleo e Gás", "Piscicultura", "Produção Cultural",
+            "Produção Industrial", "Psicologia", "Publicidade e Propaganda",
+            "Química", "Radiologia", "Recursos Humanos", "Redes de Computadores",
+            "Relações Internacionais", "Relações Públicas", "Saúde",
+            "Segurança da Informação", "Segurança do Trabalho",
+            "Serviço Social", "Sistemas de Informação", "Sociologia",
+            "Suporte Técnico", "Sustentabilidade", "Tecnologia da Informação",
+            "Telecomunicações", "Terapia Ocupacional", "Turismo",
+            "Urbanismo", "Vendas", "Zootecnia"
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +93,6 @@ public class AreaUsuario extends Tela_Base {
         configurarAbas();
         configurarCursosMultiplos();
 
-        // Preenche nome e email vindos do Firebase
         editEmail.setText(emailUsuarioLogado);
         if (usuarioFirebase.getDisplayName() != null) {
             editNome.setText(usuarioFirebase.getDisplayName());
@@ -83,16 +120,26 @@ public class AreaUsuario extends Tela_Base {
             editEmail.setError("Preencha seu e-mail");
             valido = false;
         }
-        if (editAreaCursos.getText().toString().trim().isEmpty()) {
+
+        // Valida área — máximo 3
+        String areas = editAreaCursos.getText().toString().trim();
+        if (areas.isEmpty()) {
             editAreaCursos.setError("Preencha sua área de atuação");
             valido = false;
+        } else {
+            String[] selecionadas = areas.split(",");
+            if (selecionadas.length > 3) {
+                editAreaCursos.setError("Selecione no máximo 3 áreas");
+                valido = false;
+            }
         }
+
         if (editInstituicao.getText().toString().trim().isEmpty()) {
             editInstituicao.setError("Preencha a instituição");
             valido = false;
         }
         if (editPeriodo.getText().toString().trim().isEmpty()) {
-            editPeriodo.setError("Preencha o período");
+            editPeriodo.setError("Preencha o semestre");
             valido = false;
         }
         if (editStatus.getText().toString().trim().isEmpty()) {
@@ -117,7 +164,6 @@ public class AreaUsuario extends Tela_Base {
             return;
         }
 
-        // Tudo preenchido, salva no banco
         String emailDigitado = editEmail.getText().toString().trim();
         String dados = editNome.getText() + SEPARADOR +
                 editBairro.getText() + SEPARADOR +
@@ -163,9 +209,35 @@ public class AreaUsuario extends Tela_Base {
     }
 
     private void configurarCursosMultiplos() {
-        String[] c = {"Administração", "TI", "Logística", "Engenharia"};
-        editAreaCursos.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, c));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_dropdown_item_1line,
+                AREAS
+        );
+        editAreaCursos.setAdapter(adapter);
         editAreaCursos.setTokenizer(new MultiAutoCompleteTextView.CommaTokenizer());
+        editAreaCursos.setThreshold(1); // mostra sugestões a partir do 1º caractere
+
+        // Bloqueia ao atingir 3 áreas
+        editAreaCursos.addTextChangedListener(new android.text.TextWatcher() {
+            @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override public void afterTextChanged(android.text.Editable s) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String texto = s.toString();
+                String[] partes = texto.split(",");
+                long preenchidas = 0;
+                for (String p : partes) {
+                    if (!p.trim().isEmpty()) preenchidas++;
+                }
+                if (preenchidas > 3) {
+                    editAreaCursos.setError("Máximo de 3 áreas atingido");
+                } else {
+                    editAreaCursos.setError(null);
+                }
+            }
+        });
     }
 
     private void configurarAbas() {
