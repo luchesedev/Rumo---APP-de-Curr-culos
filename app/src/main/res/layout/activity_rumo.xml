@@ -126,19 +126,6 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <ImageView
-                    android:id="@+id/ivAddCurriculo"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:background="@drawable/bg_circle_add"
-                    android:clickable="true"
-                    android:contentDescription="Adicionar currículo"
-                    android:focusable="true"
-                    android:foreground="?attr/selectableItemBackgroundBorderless"
-                    android:onClick="telaCurriculo"
-                    android:padding="8dp"
-                    android:src="@drawable/ic_add" />
-
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
