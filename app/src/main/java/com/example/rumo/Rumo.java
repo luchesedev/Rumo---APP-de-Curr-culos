@@ -13,6 +13,8 @@ import com.example.rumo.dao.CurriculoDAO;
 import com.example.rumo.model.Curriculo;
 import com.example.rumo.model.Vaga;
 import com.example.rumo.repository.VagaRepository;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.List;
 
@@ -39,6 +41,7 @@ public class Rumo extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         configurarListaCurriculos();
+        configurarCarrossel();
     }
 
     private void configurarCarrossel() {
@@ -46,8 +49,32 @@ public class Rumo extends AppCompatActivity {
         rvCarrossel.setLayoutManager(
                 new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
+        // Valores padrão caso o usuário ainda não tenha preenchido nada
+        String areaBusca = "Jovem Aprendiz";
+        String nivelBusca = "estágio";
+
+        // 1. Pega o usuário logado no Firebase
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (user != null && user.getEmail() != null) {
+            // 2. Busca o currículo salvo no SQLite
+            CurriculoDAO dao = new CurriculoDAO(this);
+            Curriculo curriculo = dao.buscarPorEmail(user.getEmail());
+
+            // 3. Verifica se a Área de Cursos (Objetivo) foi preenchida
+            if (curriculo != null && curriculo.getObjetivo() != null && !curriculo.getObjetivo().isEmpty()) {
+
+                // Como as áreas são separadas por vírgula, pegamos a primeira para focar a pesquisa
+                String[] areas = curriculo.getObjetivo().split(",");
+                if (areas.length > 0 && !areas[0].trim().isEmpty()) {
+                    areaBusca = areas[0].trim(); // Define a área da API como a área do usuário
+                }
+            }
+        }
+
+        // 4. Chama o repositório com a área dinâmica
         VagaRepository repository = new VagaRepository(this);
-        repository.buscarVagas("TI", "estagiário", new VagaRepository.VagaCallback() {
+        repository.buscarVagas(areaBusca, nivelBusca, new VagaRepository.VagaCallback() {
             @Override
             public void onSucesso(List<Vaga> vagas) {
                 runOnUiThread(() ->
